@@ -1,0 +1,137 @@
+{
+  "project_info": {
+    "project_number": "87908009839",
+    "project_id": "victorychapel-7b972",
+    "storage_bucket": "victorychapel-7b972.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87908009839:android:ed63e2fa120dc6f1b8ca9a",
+        "android_client_info": {
+          "package_name": "app.maradistudio.victory_chapel_uniuyo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87908009839-93349hhuaq4qq66qh633r4530d0lebr0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.maradistudio.victory_chapel_uniuyo",
+            "certificate_hash": "6627a2edb131da5b623af439f70004c758a3e4a3"
+          }
+        },
+        {
+          "client_id": "87908009839-s6oc53cshe91m2a6cvec2g36sfiun50e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.maradistudio.victory_chapel_uniuyo",
+            "certificate_hash": "aa64da8af5b56894d553b368bcc28e8d78fb50b5"
+          }
+        },
+        {
+          "client_id": "87908009839-e7ndkp6dh637mhg089n1c9ncc23c8dre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-IhgiCWtKYilbJ83F8DOiPkaPJfD0URM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87908009839-e7ndkp6dh637mhg089n1c9ncc23c8dre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87908009839:android:8ecbffd19680b604b8ca9a",
+        "android_client_info": {
+          "package_name": "com.maradistudio.victory_chapel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87908009839-ll060dfi7gp2gk55b8r0g8ach403tu2s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maradistudio.victory_chapel",
+            "certificate_hash": "49ad97715f1977001cad8f18d8f577bec1b279d1"
+          }
+        },
+        {
+          "client_id": "87908009839-lua2r9v0jejrsuatiev9knt15tqkp4sl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maradistudio.victory_chapel",
+            "certificate_hash": "652288c0379c1d2b0a31e3142d3b978730251210"
+          }
+        },
+        {
+          "client_id": "87908009839-smn32rqsj7auia0i30ntncdk8fribflb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maradistudio.victory_chapel",
+            "certificate_hash": "88b1fa0528e3372f8eb2df2e713b5602e9928be0"
+          }
+        },
+        {
+          "client_id": "87908009839-e7ndkp6dh637mhg089n1c9ncc23c8dre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-IhgiCWtKYilbJ83F8DOiPkaPJfD0URM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87908009839-e7ndkp6dh637mhg089n1c9ncc23c8dre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87908009839:android:0845a81825c5d4e0b8ca9a",
+        "android_client_info": {
+          "package_name": "com.maradistudio.victory_chapel_uniuyo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87908009839-e7ndkp6dh637mhg089n1c9ncc23c8dre.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-IhgiCWtKYilbJ83F8DOiPkaPJfD0URM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87908009839-e7ndkp6dh637mhg089n1c9ncc23c8dre.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
