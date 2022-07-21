@@ -40,7 +40,7 @@ android {
         multiDexEnabled true
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionName 3
     }
 
     buildTypes {
