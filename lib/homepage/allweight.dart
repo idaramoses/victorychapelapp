@@ -339,788 +339,766 @@ class _All_weightState extends State<All_weight> {
       }
     });
     return Scaffold(
-      body: WillPopScope(
-        onWillPop: () => handleWillPop(context),
-        child: SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomLeft,
-              colors: [
-                Constant.mainColor.withOpacity(0.05),
-                Colors.white.withOpacity(0.02),
-                Constant.mainColor.withOpacity(0.05),
-                Colors.white.withOpacity(0.02),
-                Constant.mainColor.withOpacity(0.01),
-              ],
-            )),
-            child: Column(
-              children: [
-                Container(
-                  height: 0,
-                  width: 0,
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("users")
-                        .where("user_id",
-                            isEqualTo: FirebaseAuth.instance.currentUser.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.data != null)
-                        return snapshot.data.docs.length > 0
-                            ? Container()
-                            : userup();
-                      else
-                        return Container();
-                    },
-                  ),
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomLeft,
+            colors: [
+              Constant.mainColor.withOpacity(0.05),
+              Colors.white.withOpacity(0.02),
+              Constant.mainColor.withOpacity(0.05),
+              Colors.white.withOpacity(0.02),
+              Constant.mainColor.withOpacity(0.01),
+            ],
+          )),
+          child: Column(
+            children: [
+              Container(
+                height: 0,
+                width: 0,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection("users")
+                      .where("user_id",
+                          isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.data != null)
+                      return snapshot.data.docs.length > 0
+                          ? Container()
+                          : userup();
+                    else
+                      return Container();
+                  },
                 ),
-                Container(
-                  width: double.infinity,
-                  child: StreamBuilder(
+              ),
+              Container(
+                width: double.infinity,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('livestream')
+                      .doc('information')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData)
+                      return const Text("");
+                    else
+                      return snapshot.data["islife"] == true
+                          ? InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LiveStreamPage(
+                                          url: snapshot.data["url"],
+                                          des: snapshot.data["descriptive"])),
+                                );
+                              },
+                              child: Container(
+                                color: Colors.lightGreen,
+                                height: 40,
+                                child: Stack(
+                                  children: [
+                                    //
+                                    _buildCard(
+                                      backgroundColor: Colors.red,
+                                      config: CustomConfig(
+                                        gradients: [
+                                          [
+                                            Colors.red,
+                                            Colors.red,
+                                          ],
+                                          [
+                                            Colors.red,
+                                            Colors.red,
+                                          ],
+                                          [
+                                            Colors.red,
+                                            Colors.white.withOpacity(0.5)
+                                          ],
+                                          [
+                                            Colors.red,
+                                            Colors.red,
+                                          ]
+                                        ],
+                                        durations: [35000, 19440, 10800, 6000],
+                                        heightPercentages: [
+                                          0.20,
+                                          0.23,
+                                          0.25,
+                                          0.30
+                                        ],
+                                        blur: _blur,
+                                        gradientBegin: Alignment.bottomLeft,
+                                        gradientEnd: Alignment.topRight,
+                                      ),
+                                    ),
+                                    Center(
+                                        child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.live_tv,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text(
+                                          'Livestream',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 40,
+                              // child: InkWell(
+                              //   onTap: () {
+                              //     Navigator.of(context)
+                              //         .push(
+                              //       MaterialPageRoute(
+                              //         builder: (context) => JustAudio(),
+                              //       ),
+                              //     )
+                              //         .then((value) {
+                              //       setState(() {});
+                              //     });
+                              //   },
+                              //   child: JustAudio(),
+                              // ),
+                            );
+                  },
+                ),
+              ),
+              Column(
+                children: [
+                  StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('livestream')
-                        .doc('information')
+                        .collection('slider')
+                        .doc("slider")
+                        .collection('slider')
+                        .orderBy("order", descending: false)
                         .snapshots(),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData)
-                        return const Text("");
-                      else
-                        return snapshot.data["islife"] == true
-                            ? InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => LiveStreamPage(
-                                            url: snapshot.data["url"],
-                                            des: snapshot.data["descriptive"])),
-                                  );
-                                },
-                                child: Container(
-                                  color: Colors.lightGreen,
-                                  height: 40,
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * .33,
+                          child: ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                            child: Swiper(
+                              autoplay: true,
+                              itemCount: snapshot.data.docs.length,
+                              viewportFraction: 0.95,
+                              scale: 0.95,
+                              itemWidth: MediaQuery.of(context).size.width,
+                              itemHeight:
+                                  MediaQuery.of(context).size.height / 3,
+                              // layout: SwiperLayout.CUSTOM,
+                              pagination: SwiperPagination(),
+                              customLayoutOption: new CustomLayoutOption(
+                                      startIndex: -1, stateCount: 3)
+                                  .addRotate([
+                                -45.0 / 180,
+                                0.0,
+                                45.0 / 180
+                              ]).addTranslate([
+                                new Offset(-340.0, -40.0),
+                                new Offset(0.0, 0.0),
+                                new Offset(340.0, -40.0)
+                              ]),
+
+                              // control: SwiperControl(color: Colors.black),
+                              // itemWidth: 300.0,
+                              // itemHeight: 400.0,
+                              // viewportFraction: 0.9,
+                              // scale: 0.9,
+                              itemBuilder: (context, _currentIndex) {
+                                Map data =
+                                    snapshot.data.docs[_currentIndex].data();
+                                // DateTime mydateTime =
+                                //     data['created'].toDate();
+                                // String formattedTime = DateFormat.yMMMd()
+                                //     .add_jm()
+                                //     .format(mydateTime);
+                                // var currentindex = _currentIndex;
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, "/${data['sliderlocation']}");
+                                  },
                                   child: Stack(
                                     children: [
-                                      //
-                                      _buildCard(
-                                        backgroundColor: Colors.red,
-                                        config: CustomConfig(
-                                          gradients: [
-                                            [
-                                              Colors.red,
-                                              Colors.red,
-                                            ],
-                                            [
-                                              Colors.red,
-                                              Colors.red,
-                                            ],
-                                            [
-                                              Colors.red,
-                                              Colors.white.withOpacity(0.5)
-                                            ],
-                                            [
-                                              Colors.red,
-                                              Colors.red,
-                                            ]
-                                          ],
-                                          durations: [
-                                            35000,
-                                            19440,
-                                            10800,
-                                            6000
-                                          ],
-                                          heightPercentages: [
-                                            0.20,
-                                            0.23,
-                                            0.25,
-                                            0.30
-                                          ],
-                                          blur: _blur,
-                                          gradientBegin: Alignment.bottomLeft,
-                                          gradientEnd: Alignment.topRight,
+                                      Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        child: Container(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              .33,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(1.0),
+                                            child: Stack(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              10.0)),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        "${data['sliderimage']}",
+                                                    fit: BoxFit.cover,
+                                                    height: double.infinity,
+                                                    width: double.infinity,
+                                                  ),
+                                                ),
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(
+                                                              10.0)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        horizontal: 2),
+                                                    child: Container(
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              .33,
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                          gradient:
+                                                              LinearGradient(
+                                                        begin:
+                                                            Alignment.topLeft,
+                                                        end: Alignment
+                                                            .bottomLeft,
+                                                        colors: [
+                                                          // Colors.white.withOpacity(0.05),
+                                                          //Colors.black.withOpacity(0.5),
+                                                          Colors.white
+                                                              .withOpacity(
+                                                                  0.05),
+                                                          Colors.black
+                                                              .withOpacity(0.8),
+                                                        ],
+                                                      )),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  bottom: 30,
+                                                  left: 1,
+                                                  right: 0,
+                                                  child: Center(
+                                                    child: Text(
+                                                      "${data['maintext']}",
+                                                      style: TextStyle(
+                                                        fontSize: ScreenUtil()
+                                                            .setSp(60),
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        // backgroundColor: Colors.black45,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      Center(
-                                          child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.live_tv,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            'Livestream',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      )),
+
+                                      // Positioned(
+                                      //     bottom: 5,
+                                      //     left: 0,
+                                      //     right: 0,
+                                      //     child: new DotsIndicator(
+                                      //         dotsCount:
+                                      //             snapshot.data.docs.length,
+                                      //         position: currentindex
+                                      //             .ceilToDouble())),
                                     ],
                                   ),
-                                ),
-                              )
-                            : SizedBox(
-                                height: 40,
-                                // child: InkWell(
-                                //   onTap: () {
-                                //     Navigator.of(context)
-                                //         .push(
-                                //       MaterialPageRoute(
-                                //         builder: (context) => JustAudio(),
-                                //       ),
-                                //     )
-                                //         .then((value) {
-                                //       setState(() {});
-                                //     });
-                                //   },
-                                //   child: JustAudio(),
-                                // ),
-                              );
-                    },
-                  ),
-                ),
-                Column(
-                  children: [
-                    StreamBuilder<QuerySnapshot>(
-                      stream: FirebaseFirestore.instance
-                          .collection('slider')
-                          .doc("slider")
-                          .collection('slider')
-                          .orderBy("order", descending: false)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height * .33,
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10.0)),
-                              child: Swiper(
-                                autoplay: true,
-                                itemCount: snapshot.data.docs.length,
-                                viewportFraction: 0.95,
-                                scale: 0.95,
-                                itemWidth: MediaQuery.of(context).size.width,
-                                itemHeight:
-                                    MediaQuery.of(context).size.height / 3,
-                                // layout: SwiperLayout.CUSTOM,
-                                pagination: SwiperPagination(),
-                                customLayoutOption: new CustomLayoutOption(
-                                        startIndex: -1, stateCount: 3)
-                                    .addRotate([
-                                  -45.0 / 180,
-                                  0.0,
-                                  45.0 / 180
-                                ]).addTranslate([
-                                  new Offset(-340.0, -40.0),
-                                  new Offset(0.0, 0.0),
-                                  new Offset(340.0, -40.0)
-                                ]),
-
-                                // control: SwiperControl(color: Colors.black),
-                                // itemWidth: 300.0,
-                                // itemHeight: 400.0,
-                                // viewportFraction: 0.9,
-                                // scale: 0.9,
-                                itemBuilder: (context, _currentIndex) {
-                                  Map data =
-                                      snapshot.data.docs[_currentIndex].data();
-                                  // DateTime mydateTime =
-                                  //     data['created'].toDate();
-                                  // String formattedTime = DateFormat.yMMMd()
-                                  //     .add_jm()
-                                  //     .format(mydateTime);
-                                  // var currentindex = _currentIndex;
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.pushNamed(context,
-                                          "/${data['sliderlocation']}");
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Card(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                          ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        return SizedBox(
+                          height: MediaQuery.of(context).size.height * .33,
+                          width: MediaQuery.of(context).size.width * .95,
+                          child: ClipRRect(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * .33,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(1.0),
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10.0)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 2),
                                           child: Container(
                                             height: MediaQuery.of(context)
                                                     .size
                                                     .height *
                                                 .33,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(1.0),
-                                              child: Stack(
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                10.0)),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl:
-                                                          "${data['sliderimage']}",
-                                                      fit: BoxFit.cover,
-                                                      height: double.infinity,
-                                                      width: double.infinity,
-                                                    ),
-                                                  ),
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                10.0)),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 2),
-                                                      child: Container(
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height *
-                                                            .33,
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                                gradient:
-                                                                    LinearGradient(
-                                                          begin:
-                                                              Alignment.topLeft,
-                                                          end: Alignment
-                                                              .bottomLeft,
-                                                          colors: [
-                                                            // Colors.white.withOpacity(0.05),
-                                                            //Colors.black.withOpacity(0.5),
-                                                            Colors.white
-                                                                .withOpacity(
-                                                                    0.05),
-                                                            Colors.black
-                                                                .withOpacity(
-                                                                    0.8),
-                                                          ],
-                                                        )),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    bottom: 30,
-                                                    left: 1,
-                                                    right: 0,
-                                                    child: Center(
-                                                      child: Text(
-                                                        "${data['maintext']}",
-                                                        style: TextStyle(
-                                                          fontSize: ScreenUtil()
-                                                              .setSp(60),
-                                                          fontWeight:
-                                                              FontWeight.w900,
-                                                          // backgroundColor: Colors.black45,
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomLeft,
+                                              colors: [
+                                                // Colors.white.withOpacity(0.05),
+                                                //Colors.black.withOpacity(0.5),
+                                                Colors.white.withOpacity(0.05),
+                                                Colors.black.withOpacity(0.8),
+                                              ],
+                                            )),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        bottom: 30,
+                                        left: 1,
+                                        right: 0,
+                                        child: Center(
+                                          child: Text(
+                                            "Loading...",
+                                            style: TextStyle(
+                                              fontSize: ScreenUtil().setSp(60),
+                                              fontWeight: FontWeight.w900,
+                                              // backgroundColor: Colors.black45,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
-
-                                        // Positioned(
-                                        //     bottom: 5,
-                                        //     left: 0,
-                                        //     right: 0,
-                                        //     child: new DotsIndicator(
-                                        //         dotsCount:
-                                        //             snapshot.data.docs.length,
-                                        //         position: currentindex
-                                        //             .ceilToDouble())),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          );
-                        } else {
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height * .33,
-                            width: MediaQuery.of(context).size.width * .95,
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10.0)),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * .33,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(1.0),
-                                    child: Stack(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10.0)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 2),
-                                            child: Container(
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  .33,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomLeft,
-                                                colors: [
-                                                  // Colors.white.withOpacity(0.05),
-                                                  //Colors.black.withOpacity(0.5),
-                                                  Colors.white
-                                                      .withOpacity(0.05),
-                                                  Colors.black.withOpacity(0.8),
-                                                ],
-                                              )),
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: 30,
-                                          left: 1,
-                                          right: 0,
-                                          child: Center(
-                                            child: Text(
-                                              "Loading...",
-                                              style: TextStyle(
-                                                fontSize:
-                                                    ScreenUtil().setSp(60),
-                                                fontWeight: FontWeight.w900,
-                                                // backgroundColor: Colors.black45,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                             ),
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/sermon.png",
-                                      height: 50.0,
-                                      width: 50.0,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Sermons',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/sermon.png",
+                                    height: 50.0,
+                                    width: 50.0,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Sermons',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MAinmesage()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MAinmesage()),
+                              ),
+                            },
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/devotional.png",
-                                      height: 50.0,
-                                      width: 50.0,
-                                      color: Theme.of(context).accentColor,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Devotionals',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/devotional.png",
+                                    height: 50.0,
+                                    width: 50.0,
+                                    color: Theme.of(context).accentColor,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Devotionals',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => devotional()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => devotional()),
+                              ),
+                            },
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/church.png",
-                                      height: 50.0,
-                                      width: 50.0,
-                                      color: Theme.of(context).accentColor,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      ' Sunday School',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/church.png",
+                                    height: 50.0,
+                                    width: 50.0,
+                                    color: Theme.of(context).accentColor,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    ' Sunday School',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => sundayschool()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => sundayschool()),
+                              ),
+                            },
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/pencil.png",
-                                      height: 45.0,
-                                      width: 45.0,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Notepad',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/pencil.png",
+                                    height: 45.0,
+                                    width: 45.0,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Notepad',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Notepad()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Notepad()),
+                              ),
+                            },
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/gospel.png",
-                                      height: 50.0,
-                                      width: 50.0,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Hymns',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/gospel.png",
+                                    height: 50.0,
+                                    width: 50.0,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Hymns',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => hymns()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => hymns()),
+                              ),
+                            },
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/pulpit.png",
-                                      height: 50.0,
-                                      width: 50.0,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Announcement',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/pulpit.png",
+                                    height: 50.0,
+                                    width: 50.0,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Announcement',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Upcoming()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Upcoming()),
+                              ),
+                            },
                           ),
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/donate.png",
-                                      height: 50.0,
-                                      width: 50.0,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Give',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/donate.png",
+                                    height: 50.0,
+                                    width: 50.0,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Give',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  )
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Donate()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Donate()),
+                              ),
+                            },
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      "assets/images/img_2.png",
-                                      height: 50.0,
-                                      width: 50.0,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Gallery',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  new Image.asset(
+                                    "assets/images/img_2.png",
+                                    height: 50.0,
+                                    width: 50.0,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Gallery',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => gallery()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => gallery()),
+                              ),
+                            },
                           ),
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: new Card(
-                            color: Theme.of(context).backgroundColor,
-                            child: InkWell(
-                              child: new Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .20,
-                                child: new Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.more_horiz,
-                                      size: 50,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Other features',
-                                      style: new TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: ScreenUtil().setSp(40)),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: new Card(
+                          color: Theme.of(context).backgroundColor,
+                          child: InkWell(
+                            child: new Container(
+                              height: MediaQuery.of(context).size.height * .20,
+                              child: new Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.more_horiz,
+                                    size: 50,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Other features',
+                                    style: new TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ScreenUtil().setSp(40)),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                ],
                               ),
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Others()),
-                                ),
-                              },
                             ),
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Others()),
+                              ),
+                            },
                           ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

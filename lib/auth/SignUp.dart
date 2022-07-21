@@ -137,7 +137,7 @@ class _SignUpState extends State<SignUp> {
 
         try {
           UserCredential user = await _auth.createUserWithEmailAndPassword(
-              email: _email, password: _password);
+              email: _email.replaceAll(' ', ''), password: _password);
           if (user != null) {
             await _auth.currentUser.updateProfile(displayName: _name);
             await Navigator.pushReplacementNamed(context, "/");

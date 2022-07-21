@@ -270,195 +270,224 @@ class HomePageState extends State<HomePage> with WidgetsBindingObserver {
       'Victory Chapel',
       style: TextStyle(color: Constant.appiconColor),
     );
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Container(
-                height: MediaQuery.of(context).size.height * .20,
-                decoration: BoxDecoration(
-                  image: new DecorationImage(
-                    image: new AssetImage("assets/images/victorychapel.jpg"),
-                    fit: BoxFit.contain,
-                  ),
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(height: 7.0),
-            Divider(
-              color: Colors.black,
-            ),
-            ListTile(
-              onTap: () => showDialog(
-                  context: context,
-                  builder: (ctx) => Consumer<ThemeNotifier>(
-                      builder: (context, theme, child) => MaterialApp(
-                          debugShowCheckedModeBanner: false,
-                          theme: theme.getTheme(),
-                          home: Container(
-                              child: SimpleDialog(
-                            title: const Text('CHOOSE THEME'),
-                            children: <Widget>[
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  theme.setLightMode();
-                                },
-                                child: const Text('Light Theme'),
-                              ),
-                              SimpleDialogOption(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  theme.setDarkMode();
-                                },
-                                child: const Text('Dark Theme'),
-                              ),
-                            ],
-                          ))))),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              leading: Icon(Icons.brightness_4_outlined),
-              title: Text('Change theme'),
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => account()));
-              },
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Donate()));
-              },
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              leading: Icon(Icons.monetization_on_outlined),
-              title: Text('Give'),
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Upcoming()));
-              },
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              leading: Icon(Icons.bookmark_border),
-              title: Text('Announcements'),
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-            ListTile(
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => About()));
-              },
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 20.0,
-              ),
-              leading: Icon(Icons.info),
-              title: Text('About us'),
-            ),
-            Divider(
-              color: Colors.black,
-            ),
-          ],
-        ),
-      ),
-      appBar: !Platform.isIOS
-          ? AppBar(
-              backgroundColor: Constant.appbarColor,
-              iconTheme: IconThemeData(color: Constant.appiconColor),
-              elevation: 0,
-              title: _pageTitle,
-              actions: <Widget>[
-                _buildSearchAction(context),
-                Stack(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => NotificationScreen()));
-                        },
-                        icon: Icon(
-                          Icons.notifications_none,
-                          color: Colors.white,
-                        )),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection("notifications")
-                              .doc(FirebaseAuth.instance.currentUser.uid)
-                              .collection(FirebaseAuth.instance.currentUser.uid)
-                              .where("read", isEqualTo: false)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.data == null ||
-                                snapshot.data.docs.length == 0) {
-                              return SizedBox.shrink();
-                            } else
-                              return Container(
-                                height: 19,
-                                width: 19,
-                                child: Center(
-                                    child: Text(
-                                  snapshot.data.docs.length.toString(),
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil().setSp(30),
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                )),
-                                decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.red, width: 2),
-                                    color: Colors.red,
-                                    shape: BoxShape.circle),
-                              );
-                          }),
+    return WillPopScope(
+      onWillPop: () => handleWillPop(context),
+      child: Scaffold(
+        key: _scaffoldKey,
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * .20,
+                  decoration: BoxDecoration(
+                    image: new DecorationImage(
+                      image: new AssetImage("assets/images/victorychapel.jpg"),
+                      fit: BoxFit.contain,
                     ),
-                  ],
+                    color: Colors.white,
+                  ),
                 ),
-              ],
-            )
-          : CupertinoNavigationBar(
-              backgroundColor: Constant.appbarColor,
-              // iconTheme: IconThemeData(color: Colors.white),
-              middle: _pageTitle,
-              trailing: _buildSearchAction(context),
-            ),
-      body: [
-        All_weight(),
-        this.book == null ? BooksWidget() : BooksWidget(book: this.book),
-        homemesage(),
-        groups(),
-        // About(),
-      ].elementAt(_bottomNavBarSelectedIndex),
-      bottomNavigationBar: _buildBottomNavigationBar(context),
+              ),
+              SizedBox(height: 7.0),
+              Divider(
+                color: Colors.black,
+              ),
+              ListTile(
+                onTap: () => showDialog(
+                    context: context,
+                    builder: (ctx) => Consumer<ThemeNotifier>(
+                        builder: (context, theme, child) => MaterialApp(
+                            debugShowCheckedModeBanner: false,
+                            theme: theme.getTheme(),
+                            home: Container(
+                                child: SimpleDialog(
+                              title: const Text('CHOOSE THEME'),
+                              children: <Widget>[
+                                SimpleDialogOption(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    theme.setLightMode();
+                                  },
+                                  child: const Text('Light Theme'),
+                                ),
+                                SimpleDialogOption(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    theme.setDarkMode();
+                                  },
+                                  child: const Text('Dark Theme'),
+                                ),
+                              ],
+                            ))))),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                leading: Icon(Icons.brightness_4_outlined),
+                title: Text('Change theme'),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => account()));
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                leading: Icon(Icons.account_circle),
+                title: Text('Profile'),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => Donate()));
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                leading: Icon(Icons.monetization_on_outlined),
+                title: Text('Give'),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => Upcoming()));
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                leading: Icon(Icons.bookmark_border),
+                title: Text('Announcements'),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => About()));
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                ),
+                leading: Icon(Icons.info),
+                title: Text('About us'),
+              ),
+              Divider(
+                color: Colors.black,
+              ),
+            ],
+          ),
+        ),
+        appBar: !Platform.isIOS
+            ? AppBar(
+                backgroundColor: Constant.appbarColor,
+                iconTheme: IconThemeData(color: Constant.appiconColor),
+                elevation: 0,
+                title: _pageTitle,
+                actions: <Widget>[
+                  _buildSearchAction(context),
+                  Stack(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => NotificationScreen()));
+                          },
+                          icon: Icon(
+                            Icons.notifications_none,
+                            color: Colors.white,
+                          )),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection("notifications")
+                                .doc(FirebaseAuth.instance.currentUser.uid)
+                                .collection(
+                                    FirebaseAuth.instance.currentUser.uid)
+                                .where("read", isEqualTo: false)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.data == null ||
+                                  snapshot.data.docs.length == 0) {
+                                return SizedBox.shrink();
+                              } else
+                                return Container(
+                                  height: 19,
+                                  width: 19,
+                                  child: Center(
+                                      child: Text(
+                                    snapshot.data.docs.length.toString(),
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(30),
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  )),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.red, width: 2),
+                                      color: Colors.red,
+                                      shape: BoxShape.circle),
+                                );
+                            }),
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            : CupertinoNavigationBar(
+                backgroundColor: Constant.appbarColor,
+                // iconTheme: IconThemeData(color: Colors.white),
+                middle: _pageTitle,
+                trailing: _buildSearchAction(context),
+              ),
+        body: [
+          All_weight(),
+          this.book == null ? BooksWidget() : BooksWidget(book: this.book),
+          homemesage(),
+          groups(),
+          // About(),
+        ].elementAt(_bottomNavBarSelectedIndex),
+        bottomNavigationBar: _buildBottomNavigationBar(context),
+      ),
     );
+  }
+
+  final snackBar = SnackBar(
+    content: Text(
+      'Press back again to exit',
+      style: TextStyle(color: Colors.white),
+    ),
+    backgroundColor: Constant.mainColor,
+    duration: snackBarDuration,
+  );
+  static const snackBarDuration = Duration(seconds: 3);
+  DateTime backButtonPressTime;
+  Future<bool> handleWillPop(BuildContext context) async {
+    final now = DateTime.now();
+    final backButtonHasNotBeenPressedOrSnackBarHasBeenClosed =
+        backButtonPressTime == null ||
+            now.difference(backButtonPressTime) > snackBarDuration;
+
+    if (backButtonHasNotBeenPressedOrSnackBarHasBeenClosed) {
+      backButtonPressTime = now;
+      Scaffold.of(context).showSnackBar(snackBar);
+      return false;
+    }
+
+    return true;
   }
 
   _openBook(Book book) {

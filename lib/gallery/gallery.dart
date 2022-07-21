@@ -112,58 +112,7 @@ class _galleryState extends State<gallery> with TickerProviderStateMixin {
                   return Text("No Members");
               }),
         ),
-        body: Column(
-          children: [
-            Container(
-              color: Constant.mainColor,
-              height: 40,
-              child: TabBar(
-                  indicatorWeight: 0.5,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicator: BoxDecoration(
-                    color: Colors.black54.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  labelColor: Constant.appiconColor,
-                  unselectedLabelColor: Colors.white,
-                  controller: _tabController,
-                  tabs: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Tab(
-                        text: "Town Camp",
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Tab(
-                        text: "Perm Site",
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Tab(
-                        text: "Abak",
-                      ),
-                    ),
-                  ]),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  Town(),
-                  Perm(),
-                  Abak()
-                  // AudioServiceWidget(child: JustAudio()),
-                  // generalGroupList(),
-                  // // (iswhite) ? groupsList(value) : groupsListblack(value),
-                  // chatRequestList()
-                ],
-              ),
-            )
-          ],
-        ));
+        body: Town());
   }
 }
 
@@ -264,146 +213,278 @@ class _TownState extends State<Town> {
                   return false;
                 },
                 child: Expanded(
-                  child: GridView.builder(
+                  child: ListView.builder(
                     controller: scrollController,
                     itemCount: snapshot.data.docs.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 200,
-                            childAspectRatio: (1 / 1.5),
-                            crossAxisSpacing: 20,
-                            mainAxisSpacing: 20),
                     itemBuilder: (BuildContext context, int index) {
                       String cover = snapshot.data.docs[index]["cover_image"];
                       int imageCount =
                           snapshot.data.docs[index]["images"] == null
                               ? 1
                               : snapshot.data.docs[index]["images"].length + 1;
+
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: ClipRRect(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(20.0)),
+                              const BorderRadius.all(Radius.circular(10.0)),
                           child: Container(
                             color: Theme.of(context).backgroundColor,
                             child: Column(
                               children: [
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(builder: (context) {
-                                        return GalleryDetail(
-                                          id: snapshot.data.docs[index]
-                                              ["photo_id"],
-                                        );
-                                      }));
-                                    },
-                                    child: ClipRRect(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20.0)),
-                                      child: Container(
-                                        // decoration: BoxDecoration(
-                                        //     borderRadius: BorderRadius.circular(10.0),
-                                        //     border: Border.all(
-                                        //         color: Colors.white, width: 2)),
-                                        child: Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            Hero(
-                                              tag:
-                                                  "cover_${snapshot.data.docs[index].id}",
-                                              child: CachedNetworkImage(
-                                                imageUrl: cover,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color:
-                                                          Constant.mainColor),
-                                                  child: Center(
-                                                    child: Text(
-                                                      imageCount.toString(),
-                                                      style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .accentColor,
-                                                          fontSize: 12),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return GalleryDetail(
+                                        id: snapshot.data.docs[index]
+                                            ["photo_id"],
+                                      );
+                                    }));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2, horizontal: 3),
+                                    child: Container(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  child: InkWell(
+                                                    child: Container(
+                                                      height: 50,
+                                                      width: 50,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(50),
+                                                        border: Border.all(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .accentColor,
+                                                            width: 1),
+                                                      ),
+                                                      child: ClipOval(
+                                                        child: Image.asset(
+                                                            "assets/images/victory_chapel.png"),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Expanded(
+                                                  child: InkWell(
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      '${snapshot.data.docs[index]["user_name"]}',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Text(
+                                                                  '${snapshot.data.docs[index]["location"]}'
+                                                                      .toUpperCase(),
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w300,
+                                                                      fontSize:
+                                                                          12),
+                                                                )
+                                                              ],
+                                                            ),
+                                                            Spacer(),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Icon(Icons.more_vert)
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  height: 60,
-                                  // decoration: BoxDecoration(
-                                  //     border: Border.all(color: Colors.black)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "${snapshot.data.docs[index]["description"]}",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: Theme.of(context)
-                                                        .accentColor),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.location_on,
-                                                    size: 15,
-                                                    color: Constant.mainColor,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                    "${snapshot.data.docs[index]["location"]}",
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.visible,
-                                                    style: TextStyle(
-                                                        fontSize: 11,
-                                                        color: Theme.of(context)
-                                                            .accentColor),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
                                           ),
-                                        ),
-                                      ],
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          // Divider(
+                                          //   color:
+                                          //       Theme.of(context).accentColor,
+                                          // ),
+                                          // SizedBox(
+                                          //   height: 10,
+                                          // ),
+                                          Container(
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  height: 300,
+                                                  width: double.infinity,
+                                                  child: Hero(
+                                                    tag:
+                                                        "cover_${snapshot.data.docs[index].id}",
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: cover,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: 0,
+                                                  right: 2,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Container(
+                                                        height: 20,
+                                                        width: 20,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                                color: Colors
+                                                                    .green),
+                                                        child: Center(
+                                                          child: Text(
+                                                            imageCount
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 12),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: Text(
+                                              '${snapshot.data.docs[index]["description"]}',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 17),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          // Divider(
+                                          //   color:
+                                          //       Theme.of(context).accentColor,
+                                          // ),
+                                          // SizedBox(
+                                          //   height: 10,
+                                          // ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 10, right: 10),
+                                            child: Row(
+                                              children: <Widget>[
+                                                StreamBuilder<QuerySnapshot>(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection("gallery")
+                                                      .doc(
+                                                          '${snapshot.data.docs[index]["photo_id"]}')
+                                                      .collection("likes")
+                                                      .snapshots(),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.data != null)
+                                                      return Text(
+                                                        "${snapshot.data.docs.length} Reactions",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .accentColor),
+                                                      );
+                                                    else
+                                                      return Text(
+                                                        "0 Views",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .accentColor),
+                                                      );
+                                                  },
+                                                ),
+                                                Spacer(),
+                                                Container(
+                                                  height: 25,
+                                                  child: Postslike(
+                                                    documentSnapshot: snapshot
+                                                        .data.docs[index],
+                                                  ),
+                                                ),
+                                                // SizedBox(
+                                                //   width: 20,
+                                                // ),
+                                                // Row(
+                                                //   children: <Widget>[
+                                                //     Icon(
+                                                //       Icons.messenger_outline,
+                                                //       color: Colors.black54,
+                                                //       size: 25.0,
+                                                //       semanticLabel:
+                                                //           'Icon', // Announced in accessibility modes (e.g TalkBack/VoiceOver). This label does not show in the UI.
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                                // SizedBox(
+                                                //   width: 20,
+                                                // ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 15),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -701,6 +782,74 @@ class _TownState extends State<Town> {
         endDate = d;
       });
     }
+  }
+
+  Widget Postslike(
+      {DocumentSnapshot documentSnapshot, String link, int articleId}) {
+    articleId = int.parse(documentSnapshot["photo_id"]);
+    return Row(
+      children: <Widget>[
+        StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("gallery")
+              .doc("$articleId")
+              .collection("likes")
+              .where("likerId",
+                  isEqualTo: FirebaseAuth.instance.currentUser.uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.data != null)
+              return InkWell(
+                onTap: () {
+                  String id = FirebaseAuth.instance.currentUser.uid;
+                  String name = FirebaseAuth.instance.currentUser.displayName;
+                  String photo = FirebaseAuth.instance.currentUser.photoURL;
+
+                  snapshot.data.docs.length < 1
+                      ? postLike(id, name, photo, articleId, documentSnapshot)
+                      : removeLike(articleId);
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.thumb_up_alt_outlined,
+                      color: snapshot.data.docs.length > 0
+                          ? Colors.red
+                          : Theme.of(context).accentColor,
+                      size: 28.0,
+                      semanticLabel:
+                          'Icon', // Announced in accessibility modes (e.g TalkBack/VoiceOver). This label does not show in the UI.
+                    ),
+                  ],
+                ),
+              );
+            else
+              return Container();
+          },
+        ),
+      ],
+    );
+  }
+
+  Future<void> postLike(String id, String name, String photo, int articleId,
+      DocumentSnapshot documentSnapshot) async {
+    var likeReference = FirebaseFirestore.instance
+        .collection("gallery")
+        .doc("$articleId")
+        .collection("likes")
+        .doc(FirebaseAuth.instance.currentUser.uid);
+
+    likeReference.set({"likerId": id, "likerName": name, "likerPhoto": photo});
+  }
+
+  void removeLike(int articleId) {
+    var likeReference = FirebaseFirestore.instance
+        .collection("gallery")
+        .doc("$articleId")
+        .collection("likes")
+        .doc(FirebaseAuth.instance.currentUser.uid);
+
+    likeReference.delete();
   }
 }
 

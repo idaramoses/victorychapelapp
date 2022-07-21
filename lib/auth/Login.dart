@@ -115,7 +115,7 @@ class _LoginState extends State<Login> {
 
         try {
           await _auth.signInWithEmailAndPassword(
-              email: _email, password: _password);
+              email: _email.replaceAll(' ', ''), password: _password);
           await Navigator.pushReplacementNamed(context, "/");
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

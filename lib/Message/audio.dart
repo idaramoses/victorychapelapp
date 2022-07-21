@@ -521,7 +521,6 @@ class DownloadItem extends StatelessWidget {
             ),
             data.task.status == DownloadTaskStatus.running
                 ? Container(
-                    height: 10,
                     child: Text(
                       '${data.task.progress} / 100%',
                       style: TextStyle(
